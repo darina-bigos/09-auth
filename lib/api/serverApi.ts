@@ -34,9 +34,16 @@ export const fetchNotes = async (params?: {
   tag?: string;
 }): Promise<Note[]> => {
   const options = await getAuthHeaders();
+
+  const cleanParams = Object.fromEntries(
+    Object.entries({ ...params, perPage: 12 }).filter(
+      entry => entry[1] !== undefined && entry[1] !== ''
+    )
+  );
+
   const response = await api.get<Note[]>('/notes', {
     ...options,
-    params: { ...params, perPage: 12 },
+    params: cleanParams,
   });
   return response.data;
 };

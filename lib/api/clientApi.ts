@@ -52,7 +52,9 @@ export const fetchNotes = async (params?: {
   page?: number;
   tag?: string;
 }): Promise<Note[]> => {
-  const response = await api.get<Note[]>('/notes', { params: { ...params, perPage: 12 } });
+  const response = await api.get<Note[]>('/notes', {
+    params: { ...params, perPage: 12 },
+  });
   return response.data;
 };
 
