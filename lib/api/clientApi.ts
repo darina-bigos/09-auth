@@ -18,6 +18,16 @@ export interface CreateNoteRequest {
   tag: NoteTag;
 }
 
+export interface UpdateMeRequest {
+  username?: string;
+  avatar?: string;
+}
+
+export interface FetchNotesResponse {
+  notes: Note[];
+  totalPages: number;
+}
+
 export const register = async (data: RegisterRequest): Promise<User> => {
   const response = await api.post<User>('/auth/register', data);
   return response.data;
@@ -42,7 +52,7 @@ export const getMe = async (): Promise<User> => {
   return response.data;
 };
 
-export const updateMe = async (data: Partial<User>): Promise<User> => {
+export const updateMe = async (data: UpdateMeRequest): Promise<User> => {
   const response = await api.patch<User>('/users/me', data);
   return response.data;
 };
@@ -51,8 +61,8 @@ export const fetchNotes = async (params?: {
   search?: string;
   page?: number;
   tag?: string;
-}): Promise<Note[]> => {
-  const response = await api.get<Note[]>('/notes', {
+}): Promise<FetchNotesResponse> => {
+  const response = await api.get<FetchNotesResponse>('/notes', {
     params: { ...params, perPage: 12 },
   });
   return response.data;

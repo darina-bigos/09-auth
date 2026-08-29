@@ -12,7 +12,6 @@ export async function proxy(request: NextRequest) {
   const refreshToken = request.cookies.get('refreshToken')?.value;
 
   let isAuth = Boolean(accessToken);
-
   const response = NextResponse.next();
 
   if (!accessToken && refreshToken) {
@@ -20,6 +19,20 @@ export async function proxy(request: NextRequest) {
 
     if (sessionResponse?.data) {
       isAuth = true;
+
+      const setCookieHeader = sessionResponse.headers['set-cookie'];
+
+      if (setCookieHeader) {
+        if (Array.isArray(setCookieHeader)) {
+          setCookieHeader.forEach(cookie => {
+            response.headers.append('set-cookie', cookie);
+          });
+        } else {
+          response.headers.append('set-cookie', setCookieHeader);
+        }
+      }
+    } else {
+      isAuth = false;
     }
   }
 
