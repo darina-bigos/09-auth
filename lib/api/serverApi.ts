@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { api } from './api';
 import { User } from '@/types/user';
 import { Note } from '@/types/note';
+import { AxiosResponse } from 'axios';
 
 const getAuthHeaders = async () => {
   const cookieStore = await cookies();
@@ -12,11 +13,11 @@ const getAuthHeaders = async () => {
   };
 };
 
-export const checkSession = async (): Promise<User | null> => {
+export const checkSession = async (): Promise<AxiosResponse<User> | null> => {
   try {
     const options = await getAuthHeaders();
-    const response = await api.get<User | null>('/auth/session', options);
-    return response.data || null;
+    const response = await api.get<User>('/auth/session', options);
+    return response; 
   } catch {
     return null;
   }

@@ -1,50 +1,36 @@
 import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import Header from '@/components/Header/Header';
-import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
+import Footer from '@/components/Footer/Footer';
 import AuthProvider from '@/components/AuthProvider/AuthProvider';
+import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
 import './globals.css';
 
-const roboto = Roboto({
-  weight: ['400', '500', '700'],
-  subsets: ['latin', 'cyrillic'],
-  variable: '--font-roboto',
-  display: 'swap',
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'NoteHub - Your Personal Notes App',
-  description: 'Manage, organize, and filter your daily notes easily with NoteHub.',
-  openGraph: {
-    title: 'NoteHub - Your Personal Notes App',
-    description: 'Manage, organize, and filter your daily notes easily with NoteHub.',
-    url: 'https://notehub.com/',
-    images: [
-      {
-        url: 'https://ac.goit.global/fullstack/react/notehub-og-meta.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'NoteHub App',
-      },
-    ],
-  },
+  title: 'NoteHub',
+  description: 'Manage your personal notes seamlessly',
 };
 
 export default function RootLayout({
   children,
   modal,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-  modal?: React.ReactNode;
-}) {
+  modal: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body className={roboto.className}>
+      <body className={inter.className}>
         <TanStackProvider>
           <AuthProvider>
-            <Header />
-            {children}
-            {modal}
+            <div className="app-container">
+              <Header />
+              <main>{children}</main>
+              {modal}
+              <Footer />
+            </div>
           </AuthProvider>
         </TanStackProvider>
       </body>
